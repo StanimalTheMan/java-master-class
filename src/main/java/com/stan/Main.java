@@ -6,6 +6,9 @@ package com.stan;
 import com.stan.car.Car;
 import com.stan.car.CarDao;
 import com.stan.car.CarService;
+import com.stan.user.User;
+import com.stan.user.UserDao;
+import com.stan.user.UserService;
 
 import java.util.Scanner;
 
@@ -13,6 +16,8 @@ public class Main {
     public static void main(String[] args) {
         CarDao carDao = new CarDao();
         CarService carService = new CarService(carDao);
+        UserDao userDao = new UserDao();
+        UserService userService = new UserService(userDao);
         try (Scanner scanner = new Scanner(System.in)) {
             while (true) {
                 System.out.println();
@@ -42,6 +47,11 @@ public class Main {
                             System.out.println(car);
                         }
                         break;
+                    case "6":
+                        User[] users = userService.getUsers();
+                        for (User user : users) {
+                            System.out.println(user);
+                        }
                     case "7":
                         return;
                 }
