@@ -20,4 +20,29 @@ public class CarDao {
     public Car[] getCars() {
         return cars;
     }
+
+    public Car[] getElectricCars() {
+        // TODO: handle with streams to better filter for electric cars
+        // Current implementation
+        // 1. naively iterate through cars, check isElectric property and if it's true, increment count
+        // 2. create new array of length of that count
+        // 3. iterate again, updating each index with electric car
+        int electricCarCount = 0;
+        for (Car car : cars) {
+            if (car.isElectric()) {
+                electricCarCount++;
+            }
+        }
+
+        Car[] electricCars = new Car[electricCarCount];
+        int curElectricCarIdx = 0;
+        for (Car car : cars) {
+            if (car.isElectric()) {
+                electricCars[curElectricCarIdx] = car;
+                curElectricCarIdx++;
+            }
+        }
+
+        return electricCars;
+    }
 }

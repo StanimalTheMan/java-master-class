@@ -22,17 +22,23 @@ public class Main {
                 try {
                     int userInputNumber = Integer.parseInt(userInput);
                     if (userInputNumber < 1 || userInputNumber > 7) {
+                        System.out.println(String.format("%d is not a valid option ❌", userInputNumber));
                         continue;
                     }
                 } catch (NumberFormatException e) {
                     System.out.println("Invalid user input: " + userInput);
-                    e.printStackTrace();
                 }
                 switch (userInput) {
                     case "4":
                         Car[] cars = carService.getCars();
                         // probably can handle better with DTOs
                         for (Car car : cars) {
+                            System.out.println(car);
+                        }
+                        break;
+                    case "5":
+                        Car[] electricCars = carService.getElectricCars();
+                        for (Car car : electricCars) {
                             System.out.println(car);
                         }
                         break;

@@ -10,4 +10,8 @@ public class CarService {
     public Car[] getCars() {
         return this.carDao.getCars();
     }
+
+    public Car[] getElectricCars() {
+        return this.carDao.getElectricCars();
+    }
 }
