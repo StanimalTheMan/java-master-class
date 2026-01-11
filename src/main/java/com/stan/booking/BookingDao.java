@@ -21,7 +21,7 @@ public class BookingDao {
     }
 
     public Booking createBooking(Car car, User user) {
-        Booking booking = new Booking(UUID.randomUUID(), car, user, LocalDateTime.now());
+        Booking booking = new Booking(UUID.randomUUID(), car, user, LocalDateTime.now(), false);
         bookings[curBookingIdx] = booking;
         curBookingIdx++;
         return booking;

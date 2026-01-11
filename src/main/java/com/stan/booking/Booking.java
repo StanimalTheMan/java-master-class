@@ -11,12 +11,14 @@ public class Booking {
     private Car car;
     private User user;
     private LocalDateTime bookingTime;
+    private boolean isCanceled;
 
-    public Booking(UUID bookingId, Car car, User user, LocalDateTime bookingTime) {
+    public Booking(UUID bookingId, Car car, User user, LocalDateTime bookingTime, boolean isCanceled) {
         this.bookingId = bookingId;
         this.car = car;
         this.user = user;
         this.bookingTime = bookingTime;
+        this.isCanceled = isCanceled;
     }
 
     public UUID getBookingId() {
@@ -51,13 +53,11 @@ public class Booking {
         this.bookingTime = bookingTime;
     }
 
-    @Override
-    public String toString() {
-        return "Booking{" +
-                "bookingId=" + bookingId +
-                ", car=" + car +
-                ", user=" + user +
-                ", bookingTime=" + bookingTime +
-                '}';
+    public boolean isCanceled() {
+        return isCanceled;
+    }
+
+    public void setCanceled(boolean canceled) {
+        isCanceled = canceled;
     }
 }

@@ -10,4 +10,14 @@ public class UserService {
     public User[] getUsers() {
         return userDao.getUsers();
     }
+
+    public User getUserById(String userId) {
+        User[] users = getUsers();
+        for (User user : users) {
+            if (user.getUserId().toString().equals(userId)) {
+                return user;
+            }
+        }
+        return null;
+    }
 }

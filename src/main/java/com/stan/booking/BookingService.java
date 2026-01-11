@@ -20,13 +20,54 @@ public class BookingService {
         return this.bookingDao.getBookings();
     }
 
+    public Booking[] getBookingsByUserId(String userId) {
+        // TODO: use lists but will iterate twice
+        // 1. in first iteration, get count of bookings that are for user
+        int userBookingsCount = 0;
+        Booking[] bookings = getBookings();
+
+        for (Booking booking : bookings) {
+            if (booking == null) {
+                break;
+            }
+            if (booking.getUser().getUserId().toString().equals(userId)) {
+                userBookingsCount++;
+            }
+        }
+        // 2. create user bookings of length of found count
+        Booking[] userBookings = new Booking[userBookingsCount];
+        int curUserBookingIdx = 0;
+        // 3. iterate second time to populate userBookings
+        for (Booking booking : bookings) {
+            if (booking == null) {
+                break;
+            }
+            if (booking.getUser().getUserId().toString().equals(userId)) {
+                userBookings[curUserBookingIdx] = booking;
+                curUserBookingIdx++;
+            }
+        }
+
+        return userBookings;
+    }
+
     public int getCurrentBookingNumber() {
         return this.bookingDao.getCurBookingIdx();
     }
 
 
-    public void getCarsByUserId(String userId) {
+    public Car[] getCarsByUserId(String userId) {
+        if (bookingDao.getCurBookingIdx() == 0) {
+            return new Car[0];
+        }
 
+        Booking[] userBookings = getBookingsByUserId(userId);
+        Car[] userCars = new Car[userBookings.length];
+        int curUserCarsIdx = 0;
+        for (Booking booking : userBookings) {
+            userCars[curUserCarsIdx] = booking.getCar();
+        }
+        return userCars;
     }
 
     public void createBooking(String carRegNumber, String userId) {
