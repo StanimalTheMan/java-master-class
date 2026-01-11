@@ -3,6 +3,9 @@ package com.stan;
 // TODO 2. create a package with your name. i.e com.franco and move this file inside the new package
 // TODO 3. implement https://amigoscode.com/learn/java-cli-build/lectures/3a83ecf3-e837-4ae5-85a8-f8ae3f60f7f5
 
+import com.stan.booking.Booking;
+import com.stan.booking.BookingDao;
+import com.stan.booking.BookingService;
 import com.stan.car.Car;
 import com.stan.car.CarDao;
 import com.stan.car.CarService;
@@ -16,8 +19,13 @@ public class Main {
     public static void main(String[] args) {
         CarDao carDao = new CarDao();
         CarService carService = new CarService(carDao);
+
         UserDao userDao = new UserDao();
         UserService userService = new UserService(userDao);
+
+        BookingDao bookingDao = new BookingDao();
+        BookingService bookingService = new BookingService(bookingDao, userDao, carDao);
+
         try (Scanner scanner = new Scanner(System.in)) {
             while (true) {
                 System.out.println();
@@ -34,8 +42,47 @@ public class Main {
                     System.out.println("Invalid user input: " + userInput);
                 }
                 switch (userInput) {
-                    case "4":
+                    case "1":
+                        // Initially display all cars
                         Car[] cars = carService.getCars();
+                        for (Car car : cars) {
+                            System.out.println(car);
+                        }
+                        System.out.println("➡️ select car reg number");
+                        String carRegNumber = scanner.nextLine();
+                        // Then display all users
+                        User[] users = userService.getUsers();
+                        for (User user : users) {
+                            System.out.println(user);
+                        }
+                        System.out.println("➡️ select user id");
+                        String userId = scanner.nextLine();
+                        bookingService.createBooking(carRegNumber, userId);
+                        break;
+                    case "2":
+                        // Initially display all users
+                        users = userService.getUsers();
+                        for (User user : users) {
+                            System.out.println(user);
+                        }
+                        System.out.println("➡️ select user id");
+                        userId = scanner.nextLine();
+                        bookingService.getCarsByUserId(userId);
+                    case "3":
+                        Booking[] bookings = bookingService.getBookings();
+                        int bookingNumber = bookingService.getCurrentBookingNumber();
+                        if (bookingNumber == 0) {
+                            System.out.println("No bookings available 😕");
+                        } else {
+                            for (Booking booking : bookings) {
+                                if (booking != null) {
+                                    System.out.println(booking);
+                                }
+                            }
+                        }
+                        break;
+                    case "4":
+                        cars = carService.getCars();
                         // probably can handle better with DTOs
                         for (Car car : cars) {
                             System.out.println(car);
@@ -48,7 +95,7 @@ public class Main {
                         }
                         break;
                     case "6":
-                        User[] users = userService.getUsers();
+                        users = userService.getUsers();
                         for (User user : users) {
                             System.out.println(user);
                         }
