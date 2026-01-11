@@ -18,12 +18,13 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         CarDao carDao = new CarDao();
-        CarService carService = new CarService(carDao);
+        BookingDao bookingDao = new BookingDao();
+        CarService carService = new CarService(carDao, bookingDao);
 
         UserDao userDao = new UserDao();
         UserService userService = new UserService(userDao);
 
-        BookingDao bookingDao = new BookingDao();
+
         BookingService bookingService = new BookingService(bookingDao, userDao, carDao);
 
         try (Scanner scanner = new Scanner(System.in)) {
@@ -91,16 +92,24 @@ public class Main {
                         }
                         break;
                     case "4":
-                        cars = carService.getCars();
-                        // probably can handle better with DTOs
-                        for (Car car : cars) {
-                            System.out.println(car);
+                        cars = carService.getAvailableCars();
+                        if (cars.length == 0) {
+                            System.out.println("❌ No cars available for renting");
+                        } else {
+                            // probably can handle better with DTOs
+                            for (Car car : cars) {
+                                System.out.println(car);
+                            }
                         }
                         break;
                     case "5":
-                        Car[] electricCars = carService.getElectricCars();
-                        for (Car car : electricCars) {
-                            System.out.println(car);
+                        Car[] electricCars = carService.getAvailableElectricCars();
+                        if (electricCars.length == 0) {
+                            System.out.println("❌ No electric cars available for renting");
+                        } else {
+                            for (Car car : electricCars) {
+                                System.out.println(car);
+                            }
                         }
                         break;
                     case "6":
@@ -108,6 +117,7 @@ public class Main {
                         for (User foundUser : users) {
                             System.out.println(foundUser);
                         }
+                        break;
                     case "7":
                         return;
                 }

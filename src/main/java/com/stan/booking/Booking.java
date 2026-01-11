@@ -60,4 +60,15 @@ public class Booking {
     public void setCanceled(boolean canceled) {
         isCanceled = canceled;
     }
+
+    @Override
+    public String toString() {
+        return "Booking{" +
+                "bookingId=" + bookingId +
+                ", car=" + car +
+                ", user=" + user +
+                ", bookingTime=" + bookingTime +
+                ", isCanceled=" + isCanceled +
+                '}';
+    }
 }

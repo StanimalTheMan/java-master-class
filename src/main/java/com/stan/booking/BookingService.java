@@ -101,7 +101,7 @@ public class BookingService {
         }
 
         Booking booking = bookingDao.createBooking(foundCar, foundUser);
-        System.out.println("🎉 Successfully boooked car with reg number " + carRegNumber + " for user " + foundUser);
+        System.out.println("🎉 Successfully booked car with reg number " + carRegNumber + " for user " + foundUser);
         System.out.println(String.format("Booking ref: %s", booking.getBookingId().toString()));
     }
 }
