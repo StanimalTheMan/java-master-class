@@ -29,9 +29,6 @@ public class BookingService {
         Booking[] bookings = getBookings();
 
         for (Booking booking : bookings) {
-            if (booking == null) {
-                break;
-            }
             if (booking.getUser().getUserId().equals(userId)) {
                 userBookingsCount++;
             }
@@ -41,9 +38,6 @@ public class BookingService {
         int curUserBookingIdx = 0;
         // 3. iterate second time to populate userBookings
         for (Booking booking : bookings) {
-            if (booking == null) {
-                break;
-            }
             if (booking.getUser().getUserId().equals(userId)) {
                 userBookings[curUserBookingIdx] = booking;
                 curUserBookingIdx++;
