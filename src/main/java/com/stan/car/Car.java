@@ -4,23 +4,23 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 public class Car {
-    private UUID regNumber;
+    private String regNumber;
     private BigDecimal rentalPricePerDay;
     private Brand brand;
     private boolean isElectric;
 
-    public Car(UUID regNumber, BigDecimal rentalPricePerDay, Brand brand, boolean isElectric) {
+    public Car(String regNumber, BigDecimal rentalPricePerDay, Brand brand, boolean isElectric) {
         this.regNumber = regNumber;
         this.rentalPricePerDay = rentalPricePerDay;
         this.brand = brand;
         this.isElectric = isElectric;
     }
 
-    public UUID getRegNumber() {
+    public String getRegNumber() {
         return regNumber;
     }
 
-    public void setRegNumber(UUID regNumber) {
+    public void setRegNumber(String regNumber) {
         this.regNumber = regNumber;
     }
 

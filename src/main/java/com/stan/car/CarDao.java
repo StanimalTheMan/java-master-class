@@ -11,9 +11,9 @@ public class CarDao {
 
     static {
         cars = new Car[]{
-                new Car(UUID.fromString("24b15982-69d7-4421-96f3-4c46d48e8cec"), new BigDecimal("89.00"), TESLA,true),
-                new Car(UUID.fromString("9ff5228a-9c40-434d-a0db-bf2e6fba576d"), new BigDecimal("50.00"), AUDI, false),
-                new Car(UUID.fromString("f466d410-f3b2-43dc-935c-13e35524d471"), new BigDecimal("77.00"), MERCEDES, false)
+                new Car("1234", new BigDecimal("89.00"), TESLA,true),
+                new Car("5678", new BigDecimal("50.00"), AUDI, false),
+                new Car("5678", new BigDecimal("77.00"), MERCEDES, false)
         };
     }
 
