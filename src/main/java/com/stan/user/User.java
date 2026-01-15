@@ -3,20 +3,20 @@ package com.stan.user;
 import java.util.UUID;
 
 public class User {
-    private UUID userId;
+    private UUID id;
     private String name;
 
     public User(UUID userId, String name) {
-        this.userId = userId;
+        this.id = userId;
         this.name = name;
     }
 
     public UUID getUserId() {
-        return userId;
+        return id;
     }
 
     public void setUserId(UUID userId) {
-        this.userId = userId;
+        this.id = userId;
     }
 
     public String getName() {
@@ -30,7 +30,7 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "userId=" + userId +
+                "id=" + id +
                 ", name='" + name + '\'' +
                 '}';
     }

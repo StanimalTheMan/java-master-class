@@ -51,7 +51,7 @@ public class Car {
     @Override
     public String toString() {
         return "Car{" +
-                "regNumber=" + regNumber +
+                "regNumber='" + regNumber + '\'' +
                 ", rentalPricePerDay=" + rentalPricePerDay +
                 ", brand=" + brand +
                 ", isElectric=" + isElectric +
