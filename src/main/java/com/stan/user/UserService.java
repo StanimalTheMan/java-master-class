@@ -1,5 +1,7 @@
 package com.stan.user;
 
+import java.util.UUID;
+
 public class UserService {
     private UserDao userDao;
 
@@ -11,10 +13,10 @@ public class UserService {
         return userDao.getUsers();
     }
 
-    public User getUserById(String userId) {
+    public User getUserById(UUID userId) {
         User[] users = getUsers();
         for (User user : users) {
-            if (user.getUserId().toString().equals(userId)) {
+            if (user.getUserId().equals(userId)) {
                 return user;
             }
         }

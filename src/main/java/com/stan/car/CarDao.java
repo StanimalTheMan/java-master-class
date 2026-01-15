@@ -1,7 +1,6 @@
 package com.stan.car;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 import static com.stan.car.Brand.*;
 

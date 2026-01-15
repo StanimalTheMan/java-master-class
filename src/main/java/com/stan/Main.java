@@ -14,6 +14,7 @@ import com.stan.user.UserDao;
 import com.stan.user.UserService;
 
 import java.util.Scanner;
+import java.util.UUID;
 
 public class Main {
     public static void main(String[] args) {
@@ -25,7 +26,7 @@ public class Main {
         UserService userService = new UserService(userDao);
 
 
-        BookingService bookingService = new BookingService(bookingDao, userDao, carDao);
+        BookingService bookingService = new BookingService(bookingDao, userDao, carService);
 
         try (Scanner scanner = new Scanner(System.in)) {
             while (true) {
@@ -58,7 +59,7 @@ public class Main {
                         }
                         System.out.println("➡️ select user id");
                         String userId = scanner.nextLine();
-                        bookingService.createBooking(carRegNumber, userId);
+                        Booking booking = bookingService.createBooking(carRegNumber, UUID.fromString(userId));
                         break;
                     case "2":
                         // Initially display all users
@@ -69,7 +70,7 @@ public class Main {
                         System.out.println("➡️ select user id");
                         userId = scanner.nextLine();
                         Car[] userCars = bookingService.getCarsByUserId(userId);
-                        User user = userService.getUserById(userId);
+                        User user = userService.getUserById(UUID.fromString(userId));
                         if (userCars.length == 0) {
                             System.out.println("❌ user " + user  + " has no cars booked");
                         } else {
@@ -79,14 +80,14 @@ public class Main {
                         }
                         break;
                     case "3":
-                        Booking[] bookings = bookingService.getBookings();
+                        Booking[] allBookings = bookingService.getBookings();
                         int bookingNumber = bookingService.getCurrentBookingNumber();
                         if (bookingNumber == 0) {
                             System.out.println("No bookings available 😕");
                         } else {
-                            for (Booking booking : bookings) {
-                                if (booking != null) {
-                                    System.out.println(booking);
+                            for (Booking currBooking : allBookings) {
+                                if (currBooking != null) {
+                                    System.out.println(currBooking);
                                 }
                             }
                         }

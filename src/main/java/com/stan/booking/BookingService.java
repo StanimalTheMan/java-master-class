@@ -1,26 +1,28 @@
 package com.stan.booking;
 
 import com.stan.car.Car;
-import com.stan.car.CarDao;
+import com.stan.car.CarService;
 import com.stan.user.User;
 import com.stan.user.UserDao;
+
+import java.util.UUID;
 
 public class BookingService {
     private BookingDao bookingDao;
     private UserDao userDao;
-    private CarDao carDao;
+    private CarService carService;
 
-    public BookingService(BookingDao bookingDao, UserDao userDao, CarDao carDao) {
+    public BookingService(BookingDao bookingDao, UserDao userDao, CarService carService) {
         this.bookingDao = bookingDao;
         this.userDao = userDao;
-        this.carDao = carDao;
+        this.carService = carService;
     }
 
     public Booking[] getBookings() {
         return this.bookingDao.getBookings();
     }
 
-    public Booking[] getBookingsByUserId(String userId) {
+    public Booking[] getBookingsByUserId(UUID userId) {
         // TODO: use lists but will iterate twice
         // 1. in first iteration, get count of bookings that are for user
         int userBookingsCount = 0;
@@ -30,7 +32,7 @@ public class BookingService {
             if (booking == null) {
                 break;
             }
-            if (booking.getUser().getUserId().toString().equals(userId)) {
+            if (booking.getUser().getUserId().equals(userId)) {
                 userBookingsCount++;
             }
         }
@@ -42,7 +44,7 @@ public class BookingService {
             if (booking == null) {
                 break;
             }
-            if (booking.getUser().getUserId().toString().equals(userId)) {
+            if (booking.getUser().getUserId().equals(userId)) {
                 userBookings[curUserBookingIdx] = booking;
                 curUserBookingIdx++;
             }
@@ -61,7 +63,7 @@ public class BookingService {
             return new Car[0];
         }
 
-        Booking[] userBookings = getBookingsByUserId(userId);
+        Booking[] userBookings = getBookingsByUserId(UUID.fromString(userId));
         Car[] userCars = new Car[userBookings.length];
         int curUserCarsIdx = 0;
         for (Booking booking : userBookings) {
@@ -70,38 +72,35 @@ public class BookingService {
         return userCars;
     }
 
-    public void createBooking(String carRegNumber, String userId) {
+    public Booking createBooking(String carRegNumber, UUID userId) {
         // Do I need to robustly handle invalid car reg number and/or user ids for now?
-        Car[] cars = carDao.getCars();
-        boolean isCarFound = false;
+        Car[] cars = carService.getAvailableCars(false);
         Car foundCar = null;
         for (Car car : cars) {
-            if (car.getRegNumber().toString().equals(carRegNumber)) {
-                isCarFound = true;
+            if (car.getRegNumber().equals(carRegNumber)) {
                 foundCar = car;
             }
         }
-        if (!isCarFound) {
+        if (foundCar == null) {
             System.out.println("❌ Unable to book car that doesn't exist");
-            return;
+            return null;
         }
 
         User[] users = userDao.getUsers();
-        boolean isUserFound = false;
         User foundUser = null;
         for (User user : users) {
-            if (user.getUserId().toString().equals(userId)) {
-                isUserFound = true;
+            if (user.getUserId().equals(userId)) {
                 foundUser = user;
             }
         }
-        if (!isUserFound) {
+        if (foundUser == null) {
             System.out.println("❌ Unable to book car for user that doesn't exist");
-            return;
+            return null;
         }
 
         Booking booking = bookingDao.createBooking(foundCar, foundUser);
         System.out.println("🎉 Successfully booked car with reg number " + carRegNumber + " for user " + foundUser);
         System.out.println(String.format("Booking ref: %s", booking.getBookingId().toString()));
+        return booking;
     }
 }
