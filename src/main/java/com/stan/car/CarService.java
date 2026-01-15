@@ -16,27 +16,18 @@ public class CarService {
         return this.carDao.getCars();
     }
 
-    public Car[] getAvailableCars() {
+    public Car[] getAvailableCars(boolean isElectric) {
         Booking[] bookings = bookingDao.getBookings();
-        Car[] cars = getCars();
-        int availableCarsCount = cars.length;
-        for (Car car : cars) {
-            for (Booking booking : bookings) {
-                if (booking != null && booking.getCar().getRegNumber() == car.getRegNumber()) {
-                    availableCarsCount--;
-                }
-            }
+        Car[] cars;
+        if (isElectric) {
+            cars = getElectricCars();
+        } else {
+            cars = getCars();
         }
-
-        Car[] availableCars = new Car[availableCarsCount];
+        Car[] availableCars = getCars(isElectric, cars, bookings);
         int curAvailableCarsIdx = 0;
         for (Car car : cars) {
-            boolean isCarAvailable = true;
-            for (Booking booking : bookings) {
-                if (booking != null && booking.getCar().getRegNumber() == car.getRegNumber()) {
-                    isCarAvailable = false;
-                }
-            }
+            boolean isCarAvailable = isIsCarAvailable(isElectric, car, bookings);
             if (isCarAvailable) {
                 availableCars[curAvailableCarsIdx] = car;
                 curAvailableCarsIdx++;
@@ -46,37 +37,43 @@ public class CarService {
         return availableCars;
     }
 
-    public Car[] getElectricCars() {
-        return this.carDao.getElectricCars();
-    }
-
-    public Car[] getAvailableElectricCars() {
-        Booking[] bookings = bookingDao.getBookings();
-        Car[] electricCars = getElectricCars();
-        int availableElectricCarsCount = electricCars.length;
-        for (Car car : electricCars) {
+    private static Car[] getCars(boolean isElectric, Car[] cars, Booking[] bookings) {
+        int availableCarsCount = cars.length;
+        for (Car car : cars) {
             for (Booking booking : bookings) {
-                if (booking != null && booking.getCar().getRegNumber() == car.getRegNumber() && car.isElectric()) {
-                    availableElectricCarsCount--;
+                if (isElectric) {
+                    if (booking != null && booking.getCar().getRegNumber() == car.getRegNumber() && car.isElectric()) {
+                        availableCarsCount--;
+                    }
+                } else {
+                    if (booking != null && booking.getCar().getRegNumber() == car.getRegNumber()) {
+                        availableCarsCount--;
+                    }
                 }
             }
         }
 
-        Car[] availableElectricCars = new Car[availableElectricCarsCount];
-        int curAvailableElectricCarsCount = 0;
-        for (Car car : electricCars) {
-            boolean isCarAvailable = true;
-            for (Booking booking : bookings) {
+        Car[] availableCars = new Car[availableCarsCount];
+        return availableCars;
+    }
+
+    private static boolean isIsCarAvailable(boolean isElectric, Car car, Booking[] bookings) {
+        boolean isCarAvailable = true;
+        for (Booking booking : bookings) {
+            if (isElectric) {
                 if (booking != null && booking.getCar().getRegNumber() == car.getRegNumber() && car.isElectric()) {
                     isCarAvailable = false;
                 }
-            }
-            if (isCarAvailable) {
-                availableElectricCars[curAvailableElectricCarsCount] = car;
-                curAvailableElectricCarsCount++;
+            } else {
+                if (booking != null && booking.getCar().getRegNumber() == car.getRegNumber()) {
+                    isCarAvailable = false;
+                }
             }
         }
+        return isCarAvailable;
+    }
 
-        return availableElectricCars;
+    public Car[] getElectricCars() {
+        return this.carDao.getElectricCars();
     }
 }

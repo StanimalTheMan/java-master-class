@@ -92,7 +92,7 @@ public class Main {
                         }
                         break;
                     case "4":
-                        cars = carService.getAvailableCars();
+                        cars = carService.getAvailableCars(false);
                         if (cars.length == 0) {
                             System.out.println("❌ No cars available for renting");
                         } else {
@@ -103,7 +103,7 @@ public class Main {
                         }
                         break;
                     case "5":
-                        Car[] electricCars = carService.getAvailableElectricCars();
+                        Car[] electricCars = carService.getAvailableCars(true);
                         if (electricCars.length == 0) {
                             System.out.println("❌ No electric cars available for renting");
                         } else {
