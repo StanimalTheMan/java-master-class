@@ -46,7 +46,7 @@ public class Main {
                 switch (userInput) {
                     case "1":
                         // Initially display all cars
-                        Car[] cars = carService.getAvailableCars();
+                        Car[] cars = carService.getAvailableCars(false);
                         for (Car car : cars) {
                             System.out.println(car);
                         }
