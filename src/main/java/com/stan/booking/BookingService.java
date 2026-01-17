@@ -76,7 +76,7 @@ public class BookingService {
             }
         }
         if (foundCar == null) {
-            System.out.println("❌ Unable to book car that doesn't exist");
+            System.out.println("❌ Unable to book car that doesn't exist or is unavailable");
             return null;
         }
 
