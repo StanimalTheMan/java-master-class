@@ -69,7 +69,7 @@ public class Main {
                         }
                         System.out.println("➡️ select user id");
                         userId = scanner.nextLine();
-                        Car[] userCars = bookingService.getCarsByUserId(userId);
+                        Car[] userCars = bookingService.getCarsByUserId(UUID.fromString(userId));
                         User user = userService.getUserById(UUID.fromString(userId));
                         if (userCars.length == 0) {
                             System.out.println("❌ user " + user  + " has no cars booked");

@@ -52,12 +52,12 @@ public class BookingService {
     }
 
 
-    public Car[] getCarsByUserId(String userId) {
+    public Car[] getCarsByUserId(UUID userId) {
         if (bookingDao.getCurBookingIdx() == 0) {
             return new Car[0];
         }
 
-        Booking[] userBookings = getBookingsByUserId(UUID.fromString(userId));
+        Booking[] userBookings = getBookingsByUserId(userId);
         Car[] userCars = new Car[userBookings.length];
         int curUserCarsIdx = 0;
         for (Booking booking : userBookings) {
