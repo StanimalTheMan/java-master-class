@@ -21,11 +21,12 @@ public class BookingDao {
     }
 
     public Booking createBooking(Car car, User user) {
-        if (curBookingIdx + 1 == capacity) {
+        if (curBookingIdx >= capacity) {
             // expand capacity when full
             // copy over existing bookings
-            Booking[] newBookings = new Booking[capacity * 2];
-            for (int i = 0; i < newBookings.length; i++) {
+            capacity *= 2;
+            Booking[] newBookings = new Booking[capacity];
+            for (int i = 0; i < bookings.length; i++) {
                 newBookings[i] = bookings[i];
             }
             bookings = newBookings;
