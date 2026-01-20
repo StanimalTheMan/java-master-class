@@ -4,6 +4,7 @@ package com.stan;
 // TODO 3. implement https://amigoscode.com/learn/java-cli-build/lectures/3a83ecf3-e837-4ae5-85a8-f8ae3f60f7f5
 
 import com.stan.booking.Booking;
+import com.stan.booking.BookingArrayDataAccessService;
 import com.stan.booking.BookingDao;
 import com.stan.booking.BookingService;
 import com.stan.car.Car;
@@ -19,7 +20,7 @@ import java.util.UUID;
 public class Main {
     public static void main(String[] args) {
         CarDao carDao = new CarDao();
-        BookingDao bookingDao = new BookingDao();
+        BookingDao bookingDao = new BookingArrayDataAccessService();
         CarService carService = new CarService(carDao, bookingDao);
 
         UserDao userDao = new UserDao();
