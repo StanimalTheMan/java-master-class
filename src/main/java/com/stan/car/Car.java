@@ -1,9 +1,9 @@
 package com.stan.car;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.UUID;
 
-public class Car {
+public class Car implements Serializable {
     private String regNumber;
     private BigDecimal rentalPricePerDay;
     private Brand brand;
