@@ -3,10 +3,11 @@ package com.stan.booking;
 import com.stan.car.Car;
 import com.stan.user.User;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public class Booking {
+public class Booking implements Serializable {
     private UUID bookingId;
     private Car car;
     private User user;
