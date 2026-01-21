@@ -16,41 +16,42 @@ public class BookingFileDataAccessService implements BookingDao {
     private static int curBookingIdx;
     private static File file;
 
-    {
-     bookings = new Booking[capacity];
-     int bookingsCount = 0;
-     try {
+    static {
+        bookings = new Booking[capacity];
+        int bookingsCount = 0;
+
         file = createFile("src/main/java/com/stan/bookings.txt");
-         if (!file.exists()) {
-             file.createNewFile();
-         }
-        Scanner scanner = new Scanner(file);
-        while (scanner.hasNext()) {
-            String serializedBooking = scanner.nextLine();
-            System.out.println(serializedBooking);
-            Booking booking = (Booking)Serializer.fromString(serializedBooking);
-            bookings[bookingsCount] = booking;
-            bookingsCount++;
+        try (Scanner scanner = new Scanner(file)) {
+            while (scanner.hasNextLine()) {
+                String serializedBooking = scanner.nextLine();
+                if (serializedBooking.isEmpty()) {
+                    continue;
+                }
+                System.out.println(serializedBooking);
+                Booking booking = (Booking)Serializer.fromString(serializedBooking);
+                if (bookingsCount >= capacity) {
+                    capacity *= 2;
+                    Booking[] newBookings = new Booking[capacity];
+                    System.arraycopy(bookings, 0, newBookings, 0, bookings.length);
+                    bookings = newBookings;
+                }
+                bookings[bookingsCount] = booking;
+                bookingsCount++;
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException("❌ Could not load bookings from file", e);
         }
-     } catch (FileNotFoundException e) {
-         System.out.println(e.getMessage());
-         throw new RuntimeException(e);
-     } catch (IOException e) {
-         System.out.println("❌ Could not deserialize booking");
-     } catch (ClassNotFoundException e) {
-         throw new RuntimeException(e);
-     }
-        curBookingIdx = bookings.length;
+        curBookingIdx = bookingsCount;
     }
 
     @Override
     public Booking[] getBookings() {
-        return new Booking[0];
+        return bookings;
     }
 
     @Override
     public int getCurBookingIdx() {
-        return 0;
+        return curBookingIdx;
     }
 
     @Override
@@ -78,14 +79,10 @@ public class BookingFileDataAccessService implements BookingDao {
     }
 
     private static void writeToFile(File file, String text) {
-        try {
-            FileWriter fileWriter = new FileWriter(file, true);
-            PrintWriter writer = new PrintWriter(fileWriter);
+        try (PrintWriter writer = new PrintWriter(new FileWriter(file, true))) {
             writer.println(text);
-            writer.flush();
-            writer.close();
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 
