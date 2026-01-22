@@ -104,7 +104,7 @@ public class Main {
                         break;
                     case "5":
                         List<Car> electricCars = carService.getAvailableCars(true);
-                        if (electricCars.length == 0) {
+                        if (electricCars.size() == 0) {
                             System.out.println("❌ No electric cars available for renting");
                         } else {
                             for (Car car : electricCars) {
