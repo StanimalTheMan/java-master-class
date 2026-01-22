@@ -11,13 +11,14 @@ import com.stan.user.User;
 import com.stan.user.UserDao;
 import com.stan.user.UserService;
 
+import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
 
 public class Main {
     public static void main(String[] args) {
         CarDao carDao = new CarDao();
-        BookingDao bookingDao = new BookingFileDataAccessService();
+        BookingDao bookingDao = new BookingArrayDataAccessService();
         CarService carService = new CarService(carDao, bookingDao);
 
         UserDao userDao = new UserDao();
@@ -44,7 +45,7 @@ public class Main {
                 switch (userInput) {
                     case "1":
                         // Initially display all cars
-                        Car[] cars = carService.getAvailableCars(false);
+                        List<Car> cars = carService.getAvailableCars(false);
                         for (Car car : cars) {
                             System.out.println(car);
                         }
@@ -92,7 +93,7 @@ public class Main {
                         break;
                     case "4":
                         cars = carService.getAvailableCars(false);
-                        if (cars.length == 0) {
+                        if (cars.size() == 0) {
                             System.out.println("❌ No cars available for renting");
                         } else {
                             // probably can handle better with DTOs
@@ -102,7 +103,7 @@ public class Main {
                         }
                         break;
                     case "5":
-                        Car[] electricCars = carService.getAvailableCars(true);
+                        List<Car> electricCars = carService.getAvailableCars(true);
                         if (electricCars.length == 0) {
                             System.out.println("❌ No electric cars available for renting");
                         } else {
