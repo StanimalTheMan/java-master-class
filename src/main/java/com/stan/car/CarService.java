@@ -4,6 +4,7 @@ import com.stan.booking.Booking;
 import com.stan.booking.BookingDao;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class CarService {
@@ -33,16 +34,19 @@ public class CarService {
     }
 
     private static List<Car> getCars(boolean isElectric, List<Car> cars, List<Booking> bookings) {
-        List<Car> availableCars = new ArrayList<>();
-        for (Car car : cars) {
+        List<Car> availableCars = cars;
+
+        Iterator<Car> iter = availableCars.iterator();
+        while (iter.hasNext()) {
+            Car car = iter.next();
             for (Booking booking : bookings) {
                 if (isElectric) {
-                    if (booking != null && booking.getCar().getRegNumber() != car.getRegNumber() && car.isElectric()) {
-                        availableCars.add(car);
+                    if (booking != null && booking.getCar().getRegNumber() == car.getRegNumber() && car.isElectric()) {
+                        iter.remove();
                     }
                 } else {
-                    if (booking != null && booking.getCar().getRegNumber() != car.getRegNumber()) {
-                        availableCars.add(car);
+                    if (booking != null && booking.getCar().getRegNumber() == car.getRegNumber()) {
+                        iter.remove();
                     }
                 }
             }
