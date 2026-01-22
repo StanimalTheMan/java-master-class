@@ -18,7 +18,7 @@ import java.util.UUID;
 public class Main {
     public static void main(String[] args) {
         CarDao carDao = new CarDao();
-        BookingDao bookingDao = new BookingArrayDataAccessService();
+        BookingDao bookingDao = new BookingFileDataAccessService();
         CarService carService = new CarService(carDao, bookingDao);
 
         UserDao userDao = new UserDao();

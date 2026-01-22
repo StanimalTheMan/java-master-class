@@ -47,6 +47,7 @@ public class BookingFileDataAccessService implements BookingDao {
     @Override
     public Booking createBooking(Car car, User user) {
         Booking booking = new Booking(UUID.randomUUID(), car, user, LocalDateTime.now(), false);
+        // TODO: this logic breaks because every time i rerun app, available cars are reinitialized.  so this only works if i currently add multiple bookings in same run?
         bookings.add(booking);
         try {
             String bookingString = Serializer.toString(booking);
