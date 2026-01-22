@@ -20,7 +20,7 @@ public class CarService {
     }
 
     public List<Car> getAvailableCars(boolean isElectric) {
-        Booking[] bookings = bookingDao.getBookings();
+        List<Booking> bookings = bookingDao.getBookings();
         List<Car> cars;
         if (isElectric) {
             cars = getElectricCars();
@@ -32,7 +32,7 @@ public class CarService {
         return availableCars;
     }
 
-    private static List<Car> getCars(boolean isElectric, List<Car> cars, Booking[] bookings) {
+    private static List<Car> getCars(boolean isElectric, List<Car> cars, List<Booking> bookings) {
         List<Car> availableCars = new ArrayList<>();
         for (Car car : cars) {
             for (Booking booking : bookings) {

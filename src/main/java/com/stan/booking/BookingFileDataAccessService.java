@@ -41,14 +41,13 @@ public class BookingFileDataAccessService implements BookingDao {
 
     @Override
     public int getCurBookingIdx() {
-        return curBookingIdx;
+        return bookings.size();
     }
 
     @Override
     public Booking createBooking(Car car, User user) {
         Booking booking = new Booking(UUID.randomUUID(), car, user, LocalDateTime.now(), false);
         bookings.add(booking);
-        curBookingIdx++;
         try {
             String bookingString = Serializer.toString(booking);
             writeToFile(file, bookingString);

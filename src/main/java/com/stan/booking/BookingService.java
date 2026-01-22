@@ -52,7 +52,6 @@ public class BookingService {
 
         List<Booking> userBookings = getBookingsByUserId(userId);
         List<Car> userCars = new ArrayList<>();
-        int curUserCarsIdx = 0;
         for (Booking booking : userBookings) {
             userCars.add(booking.getCar());
         }
