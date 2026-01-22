@@ -20,7 +20,7 @@ public class BookingFileDataAccessService implements BookingDao {
         bookings = new Booking[capacity];
         int bookingsCount = 0;
 
-        file = createFile("src/main/java/com/stan/bookings.txt");
+        file = createFile("src/main/java/com/stan/bookings.dat");
         try (Scanner scanner = new Scanner(file)) {
             while (scanner.hasNextLine()) {
                 String serializedBooking = scanner.nextLine();
