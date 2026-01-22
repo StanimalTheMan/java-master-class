@@ -52,7 +52,7 @@ public class Main {
                         System.out.println("➡️ select car reg number");
                         String carRegNumber = scanner.nextLine();
                         // Then display all users
-                        User[] users = userService.getUsers();
+                        List<User> users = userService.getUsers();
                         for (User user : users) {
                             System.out.println(user);
                         }

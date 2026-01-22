@@ -5,6 +5,7 @@ import com.stan.car.CarService;
 import com.stan.user.User;
 import com.stan.user.UserDao;
 
+import java.util.List;
 import java.util.UUID;
 
 public class BookingService {
@@ -74,7 +75,7 @@ public class BookingService {
 
     public Booking createBooking(String carRegNumber, UUID userId) {
         // Do I need to robustly handle invalid car reg number and/or user ids for now?
-        Car[] cars = carService.getAvailableCars(false);
+        List<Car> cars = carService.getAvailableCars(false);
         Car foundCar = null;
         for (Car car : cars) {
             if (car.getRegNumber().equals(carRegNumber)) {
@@ -86,7 +87,7 @@ public class BookingService {
             return null;
         }
 
-        User[] users = userDao.getUsers();
+        List<User> users = userDao.getUsers();
         User foundUser = null;
         for (User user : users) {
             if (user.getUserId().equals(userId)) {
