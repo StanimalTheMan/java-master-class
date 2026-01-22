@@ -68,9 +68,9 @@ public class Main {
                         }
                         System.out.println("➡️ select user id");
                         userId = scanner.nextLine();
-                        Car[] userCars = bookingService.getCarsByUserId(UUID.fromString(userId));
+                        List<Car> userCars = bookingService.getCarsByUserId(UUID.fromString(userId));
                         User user = userService.getUserById(UUID.fromString(userId));
-                        if (userCars.length == 0) {
+                        if (userCars.size() == 0) {
                             System.out.println("❌ user " + user  + " has no cars booked");
                         } else {
                             for (Car car : userCars) {
@@ -79,7 +79,7 @@ public class Main {
                         }
                         break;
                     case "3":
-                        Booking[] allBookings = bookingService.getBookings();
+                        List<Booking> allBookings = bookingService.getBookings();
                         int bookingNumber = bookingService.getCurrentBookingNumber();
                         if (bookingNumber == 0) {
                             System.out.println("No bookings available 😕");
