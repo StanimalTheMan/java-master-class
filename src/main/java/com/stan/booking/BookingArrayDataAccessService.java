@@ -10,7 +10,6 @@ import java.util.UUID;
 
 public class BookingArrayDataAccessService implements BookingDao {
     private static List<Booking> bookings = new ArrayList<>();
-    private static int curBookingIdx = 0;
 
     @Override
     public List<Booking> getBookings() {

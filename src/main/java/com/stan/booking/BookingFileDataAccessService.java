@@ -13,7 +13,6 @@ import java.util.UUID;
 
 public class BookingFileDataAccessService implements BookingDao {
     private static List<Booking> bookings = new ArrayList<>();
-    private static int curBookingIdx;
     private static File file;
 
     static {
@@ -31,7 +30,6 @@ public class BookingFileDataAccessService implements BookingDao {
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException("❌ Could not load bookings from file", e);
         }
-        curBookingIdx = bookings.size();
     }
 
     @Override
