@@ -5,6 +5,8 @@ import com.stan.car.CarService;
 import com.stan.user.User;
 import com.stan.user.UserDao;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class BookingService {
@@ -18,35 +20,20 @@ public class BookingService {
         this.carService = carService;
     }
 
-    public Booking[] getBookings() {
+    public List<Booking> getBookings() {
         return this.bookingDao.getBookings();
     }
 
-    public Booking[] getBookingsByUserId(UUID userId) {
-        // TODO: use lists but will iterate twice
-        // 1. in first iteration, get count of bookings that are for user
-        int userBookingsCount = 0;
-        Booking[] bookings = getBookings();
+    public List<Booking> getBookingsByUserId(UUID userId) {
+        List<Booking> bookings = getBookings();
+        List<Booking> userBookings = new ArrayList<>();
 
         for (Booking booking : bookings) {
             if (booking == null) {
                 continue;
             }
             if (booking.getUser().getUserId().equals(userId)) {
-                userBookingsCount++;
-            }
-        }
-        // 2. create user bookings of length of found count
-        Booking[] userBookings = new Booking[userBookingsCount];
-        int curUserBookingIdx = 0;
-        // 3. iterate second time to populate userBookings
-        for (Booking booking : bookings) {
-            if (booking == null) {
-                continue;
-            }
-            if (booking.getUser().getUserId().equals(userId)) {
-                userBookings[curUserBookingIdx] = booking;
-                curUserBookingIdx++;
+               userBookings.add(booking);
             }
         }
 
@@ -58,23 +45,22 @@ public class BookingService {
     }
 
 
-    public Car[] getCarsByUserId(UUID userId) {
+    public List<Car> getCarsByUserId(UUID userId) {
         if (bookingDao.getCurBookingIdx() == 0) {
-            return new Car[0];
+            return new ArrayList<>();
         }
 
-        Booking[] userBookings = getBookingsByUserId(userId);
-        Car[] userCars = new Car[userBookings.length];
-        int curUserCarsIdx = 0;
+        List<Booking> userBookings = getBookingsByUserId(userId);
+        List<Car> userCars = new ArrayList<>();
         for (Booking booking : userBookings) {
-            userCars[curUserCarsIdx] = booking.getCar();
+            userCars.add(booking.getCar());
         }
         return userCars;
     }
 
     public Booking createBooking(String carRegNumber, UUID userId) {
         // Do I need to robustly handle invalid car reg number and/or user ids for now?
-        Car[] cars = carService.getAvailableCars(false);
+        List<Car> cars = carService.getAvailableCars(false);
         Car foundCar = null;
         for (Car car : cars) {
             if (car.getRegNumber().equals(carRegNumber)) {
@@ -86,7 +72,7 @@ public class BookingService {
             return null;
         }
 
-        User[] users = userDao.getUsers();
+        List<User> users = userDao.getUsers();
         User foundUser = null;
         for (User user : users) {
             if (user.getUserId().equals(userId)) {
