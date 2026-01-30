@@ -16,11 +16,6 @@ public class UserService {
 
     public User getUserById(UUID userId) {
         List<User> users = getUsers();
-        for (User user : users) {
-            if (user.getUserId().equals(userId)) {
-                return user;
-            }
-        }
-        return null;
+        return users.stream().filter(user -> user.getUserId().equals(userId)).findFirst().orElse(null);
     }
 }

@@ -5,9 +5,7 @@ import com.stan.car.CarService;
 import com.stan.user.User;
 import com.stan.user.UserDao;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class BookingService {
     private BookingDao bookingDao;
@@ -61,30 +59,20 @@ public class BookingService {
     public Booking createBooking(String carRegNumber, UUID userId) {
         // Do I need to robustly handle invalid car reg number and/or user ids for now?
         List<Car> cars = carService.getAvailableCars(false);
-        Car foundCar = null;
-        for (Car car : cars) {
-            if (car.getRegNumber().equals(carRegNumber)) {
-                foundCar = car;
-            }
-        }
-        if (foundCar == null) {
+        Optional<Car> foundCar = cars.stream().filter(car -> Objects.equals(car.getRegNumber(), carRegNumber)).findFirst();
+        if (foundCar.isEmpty()) {
             System.out.println("❌ Unable to book car that doesn't exist or is unavailable");
             return null;
         }
 
         List<User> users = userDao.getUsers();
-        User foundUser = null;
-        for (User user : users) {
-            if (user.getUserId().equals(userId)) {
-                foundUser = user;
-            }
-        }
+        User foundUser = users.stream().filter(user -> user.getUserId().equals(userId)).findFirst().orElse(null);
         if (foundUser == null) {
             System.out.println("❌ Unable to book car for user that doesn't exist");
             return null;
         }
 
-        Booking booking = bookingDao.createBooking(foundCar, foundUser);
+        Booking booking = bookingDao.createBooking(foundCar.get(), foundUser);
         System.out.println("🎉 Successfully booked car with reg number " + carRegNumber + " for user " + foundUser);
         System.out.println(String.format("Booking ref: %s", booking.getBookingId().toString()));
         return booking;
