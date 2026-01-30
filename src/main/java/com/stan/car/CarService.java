@@ -34,7 +34,7 @@ public class CarService {
 
     private static List<Car> getCars(boolean isElectric, List<Car> cars, List<Booking> bookings) {
         Set<String> bookedCarRegNumbers = bookings.stream().map(booking -> booking.getCar().getRegNumber()).collect(Collectors.toSet());
-        return cars.stream().filter(car -> !bookedCarRegNumbers.contains(car.getRegNumber())).filter(car -> !isElectric || car.isElectric()).toList();
+        return cars.stream().filter(car -> !bookedCarRegNumbers.contains(car.getRegNumber())).filter(car -> car.isElectric() == isElectric).toList();
     }
 
     public List<Car> getElectricCars() {
