@@ -2,7 +2,6 @@ package com.stan.user;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class UserService {
     private UserDao userDao;
