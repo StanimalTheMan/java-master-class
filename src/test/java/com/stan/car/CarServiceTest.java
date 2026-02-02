@@ -1,7 +1,6 @@
 package com.stan.car;
 
 import com.stan.booking.BookingArrayDataAccessService;
-import com.stan.booking.BookingDao;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -9,7 +8,6 @@ import org.junit.jupiter.params.provider.CsvSource;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class CarServiceTest {
     public static final int EXPECTED_INITIAL_CARS_COUNT = 3;

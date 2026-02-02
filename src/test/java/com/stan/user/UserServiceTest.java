@@ -9,7 +9,6 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 
 class UserServiceTest {
     public static final int EXPECTED_INITIAL_USERS_COUNT = 2;
