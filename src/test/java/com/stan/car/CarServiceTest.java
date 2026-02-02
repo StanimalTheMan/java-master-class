@@ -15,7 +15,7 @@ class CarServiceTest {
             new CarService(new CarDao(), new BookingArrayDataAccessService());
 
     @Test
-    void getCars() {
+    void canGetCars() {
         // when
         List<Car> cars = underTest.getCars();
         // then
@@ -27,7 +27,7 @@ class CarServiceTest {
             "true",
             "false"
     })
-    void getAvailableCars(boolean isElectric) {
+    void canGetAvailableCars(boolean isElectric) {
         // when
         List<Car> cars = underTest.getAvailableCars(isElectric);
         // then
@@ -39,7 +39,7 @@ class CarServiceTest {
     }
 
     @Test
-    void getElectricCars() {
+    void canGetElectricCars() {
         // when
         List<Car> electricCars = underTest.getElectricCars();
         // then
