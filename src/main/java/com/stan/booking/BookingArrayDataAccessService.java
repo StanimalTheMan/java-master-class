@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class BookingArrayDataAccessService implements BookingDao {
-    private static List<Booking> bookings = new ArrayList<>();
+    private List<Booking> bookings = new ArrayList<>();
 
     @Override
     public List<Booking> getBookings() {
