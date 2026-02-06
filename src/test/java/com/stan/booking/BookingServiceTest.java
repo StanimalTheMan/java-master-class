@@ -5,7 +5,6 @@ import com.stan.car.CarDao;
 import com.stan.car.CarService;
 import com.stan.user.User;
 import com.stan.user.UserDao;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -68,24 +67,43 @@ class BookingServiceTest {
     @Test
     void canGetBookings() {
         // given
-        given(bookingDao.getBookings()).willReturn(new ArrayList<>());
+        Car car1234 = new Car("1234", new BigDecimal("89.00"), TESLA,true);
+        User james = new User(UUID.fromString("8ca51d2b-aaaf-4bf2-834a-e02964e10fc3"), "James");
+        given(bookingDao.getBookings()).willReturn(new ArrayList<>(
+                Arrays.asList(new Booking(
+                        UUID.randomUUID(),
+                        car1234,
+                        james,
+                        LocalDateTime.now(),
+                        false))));
         // when
         List<Booking> bookings = underTest.getBookings();
         // then
         verify(bookingDao).getBookings();
-        assertThat(bookings.isEmpty()).isTrue();
+        assertThat(bookings.isEmpty()).isFalse();
+        assertThat(bookings.size()).isEqualTo(1);
     }
 
     @ParameterizedTest
     @CsvSource({
             "8ca51d2b-aaaf-4bf2-834a-e02964e10fc3",
-            "b10d126a-3608-4980-9f9c-aa179f5cebc3",
     })
     void canGetBookingsByUserId(UUID userId) {
+        // given
+        Car car1234 = new Car("1234", new BigDecimal("89.00"), TESLA,true);
+        User james = new User(UUID.fromString("8ca51d2b-aaaf-4bf2-834a-e02964e10fc3"), "James");
+        given(bookingDao.getBookings()).willReturn(new ArrayList<>(
+                Arrays.asList(new Booking(
+                        UUID.randomUUID(),
+                        car1234,
+                        james,
+                        LocalDateTime.now(),
+                        false))));
         // when
         List<Booking> bookingsByUserId = underTest.getBookingsByUserId(userId);
         // then
-        assertThat(bookingsByUserId.isEmpty()).isTrue();
+        assertThat(bookingsByUserId.isEmpty()).isFalse();
+        assertThat(bookingsByUserId.get(0).getUser().getUserId()).isEqualTo(userId);
     }
 
     @ParameterizedTest
@@ -101,12 +119,12 @@ class BookingServiceTest {
     @Test
     void canGetCurrentBookingNumber() {
         // given
-        given(bookingDao.getCurBookingIdx()).willReturn(0);
+        given(bookingDao.getCurBookingIdx()).willReturn(2);
         // when
         int currentBookingNumber = underTest.getCurrentBookingNumber();
         // then
         verify(bookingDao).getCurBookingIdx();
-        assertThat(currentBookingNumber).isEqualTo(0);
+        assertThat(currentBookingNumber).isEqualTo(2);
     }
 
     @ParameterizedTest
