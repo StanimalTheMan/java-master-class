@@ -58,9 +58,6 @@ class BookingServiceTest {
     @Captor
     private ArgumentCaptor<User> userArgumentCaptor;
 
-    @Captor
-    private ArgumentCaptor<Booking> bookingArgumentCaptor;
-
     @InjectMocks
     private BookingService underTest;
 
@@ -184,7 +181,11 @@ class BookingServiceTest {
         int bookingsCount = underTest.getBookings().size();
         Booking newBooking = underTest.createBooking(carRegNumber, userId);
         // then
-        verify(bookingDao).createBooking(carArgumentCaptor.capture(), userArgumentCaptor.capture());// then
+        verify(bookingDao).createBooking(carArgumentCaptor.capture(), userArgumentCaptor.capture());
+        Car carArgumentCaptorValue = carArgumentCaptor.getValue();
+        assertThat(carArgumentCaptorValue.getRegNumber()).isEqualTo(carRegNumber);
+        User userArgumentCaptorValue = userArgumentCaptor.getValue();
+        assertThat(userArgumentCaptorValue.getUserId()).isEqualTo(userId);
         assertThat(newBooking.getCar().getRegNumber()).isEqualTo(carRegNumber);
         assertThat(newBooking.getUser().getUserId()).isEqualTo(userId);
         assertThat(newBooking.getBookingTime()).isAfter(currentTime);
