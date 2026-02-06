@@ -2,17 +2,29 @@ package com.stan.car;
 
 import com.stan.booking.BookingArrayDataAccessService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import static com.stan.car.Brand.TESLA;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class CarServiceTest {
     public static final int EXPECTED_INITIAL_CARS_COUNT = 3;
-    private final CarService underTest =
-            new CarService(new CarDao(), new BookingArrayDataAccessService());
+    @Mock
+    public CarDao carDao;
+    @InjectMocks
+    private CarService underTest;
 
     @Test
     void canGetCars() {
@@ -40,6 +52,10 @@ class CarServiceTest {
 
     @Test
     void canGetElectricCars() {
+        // given
+        when(underTest.getElectricCars()).thenReturn(new ArrayList<>(
+                Arrays.asList(
+                        new Car("1234", new BigDecimal("89.00"), TESLA,true))));
         // when
         List<Car> electricCars = underTest.getElectricCars();
         // then
