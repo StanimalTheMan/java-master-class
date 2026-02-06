@@ -59,8 +59,8 @@ public class BookingService {
     public Booking createBooking(String carRegNumber, UUID userId) {
         // Do I need to robustly handle invalid car reg number and/or user ids for now?
         List<Car> cars = carService.getAvailableCars(false);
-        Optional<Car> foundCar = cars.stream().filter(car -> Objects.equals(car.getRegNumber(), carRegNumber)).findFirst();
-        if (foundCar.isEmpty()) {
+        Car foundCar = cars.stream().filter(car -> Objects.equals(car.getRegNumber(), carRegNumber)).findFirst().orElse(null);
+        if (foundCar == null) {
             System.out.println("❌ Unable to book car that doesn't exist or is unavailable");
             return null;
         }
@@ -72,7 +72,7 @@ public class BookingService {
             return null;
         }
 
-        Booking booking = bookingDao.createBooking(foundCar.get(), foundUser);
+        Booking booking = bookingDao.createBooking(foundCar, foundUser);
         System.out.println("🎉 Successfully booked car with reg number " + carRegNumber + " for user " + foundUser);
         System.out.println(String.format("Booking ref: %s", booking.getBookingId().toString()));
         return booking;
