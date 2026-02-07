@@ -20,9 +20,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class CarServiceTest {
-    public static final int EXPECTED_INITIAL_CARS_COUNT = 3;
-
+class CarServiceTest { ;
     @Mock
     private CarDao carDao;
 
@@ -35,16 +33,15 @@ class CarServiceTest {
     @Test
     void canGetCars() {
         // given
-        when(carDao.getCars()).thenReturn(new ArrayList<>(
-                Arrays.asList(
-                        new Car("1234", new BigDecimal("89.00"), TESLA,true),
-                        new Car("5678", new BigDecimal("50.00"), AUDI, false),
-                        new Car("5678", new BigDecimal("77.00"), MERCEDES, false))));
+        when(carDao.getCars()).thenReturn(List.of(  new Car("1234", new BigDecimal("89.00"), TESLA,true),
+                new Car("5678", new BigDecimal("50.00"), AUDI, false),
+                new Car("5678", new BigDecimal("77.00"), MERCEDES, false)));
+
         // when
         List<Car> cars = underTest.getCars();
+
         // then
-        verify(carDao).getCars();
-        assertThat(cars.size()).isEqualTo(EXPECTED_INITIAL_CARS_COUNT);
+        assertThat(cars).hasSize(3);
     }
 
     @ParameterizedTest
@@ -80,13 +77,13 @@ class CarServiceTest {
     @Test
     void canGetElectricCars() {
         // given
-        when(underTest.getElectricCars()).thenReturn(new ArrayList<>(
-                Arrays.asList(
-                        new Car("1234", new BigDecimal("89.00"), TESLA,true))));
+        when(carDao.getElectricCars()).thenReturn(
+                List.of(
+                        new Car("1234", new BigDecimal("89.00"), TESLA,true)));
         // when
         List<Car> electricCars = underTest.getElectricCars();
         // then
-        assertThat(electricCars.size()).isEqualTo(1);
+        assertThat(electricCars).hasSize(1);
         assertThat(electricCars.get(0).isElectric()).isTrue();
     }
 }
