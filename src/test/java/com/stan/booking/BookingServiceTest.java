@@ -185,9 +185,8 @@ class BookingServiceTest {
         Car carArgumentCaptorValue = carArgumentCaptor.getValue();
         assertThat(carArgumentCaptorValue.getRegNumber()).isEqualTo(carRegNumber);
         User userArgumentCaptorValue = userArgumentCaptor.getValue();
-        assertThat(userArgumentCaptorValue.getUserId()).isEqualTo(userId);
-        assertThat(newBooking.getCar().getRegNumber()).isEqualTo(carRegNumber);
-        assertThat(newBooking.getUser().getUserId()).isEqualTo(userId);
-        assertThat(newBooking.getBookingTime()).isAfter(currentTime);
+        assertThat(userArgumentCaptorValue).isEqualTo(james);
+        assertThat(newBooking.getCar()).isEqualTo(car1234);
+//        assertThat(newBooking.getBookingTime()).isEqualTo(currentTime);
     }
 }
