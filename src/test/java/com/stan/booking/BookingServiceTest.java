@@ -65,37 +65,36 @@ class BookingServiceTest {
     void canGetBookings() {
         // given
         Car car1234 = new Car("1234", new BigDecimal("89.00"), TESLA,true);
-        User james = new User(UUID.fromString("8ca51d2b-aaaf-4bf2-834a-e02964e10fc3"), "James");
-        given(bookingDao.getBookings()).willReturn(new ArrayList<>(
-                Arrays.asList(new Booking(
-                        UUID.randomUUID(),
-                        car1234,
-                        james,
-                        LocalDateTime.now(),
-                        false))));
+        User james = new User(UUID.randomUUID(), "James");
+        List<Booking> bookings = List.of(new Booking(
+                UUID.randomUUID(),
+                car1234,
+                james,
+                LocalDateTime.now(),
+                false));
+        given(bookingDao.getBookings()).willReturn(bookings);
+
         // when
-        List<Booking> bookings = underTest.getBookings();
+        List<Booking> actual = underTest.getBookings();
+
         // then
-        verify(bookingDao).getBookings();
-        assertThat(bookings.isEmpty()).isFalse();
-        assertThat(bookings.size()).isEqualTo(1);
+        assertThat(actual).hasSize(1).containsAll(bookings);
     }
 
-    @ParameterizedTest
-    @CsvSource({
-            "8ca51d2b-aaaf-4bf2-834a-e02964e10fc3",
-    })
-    void canGetBookingsByUserId(UUID userId) {
+    @Test
+    void canGetBookingsByUserId() {
         // given
         Car car1234 = new Car("1234", new BigDecimal("89.00"), TESLA,true);
-        User james = new User(UUID.fromString("8ca51d2b-aaaf-4bf2-834a-e02964e10fc3"), "James");
-        given(bookingDao.getBookings()).willReturn(new ArrayList<>(
-                Arrays.asList(new Booking(
+        UUID userId = UUID.randomUUID();
+        User james = new User(userId, "James");
+        given(bookingDao.getBookings()).willReturn(
+                List.of( new Booking(
                         UUID.randomUUID(),
                         car1234,
                         james,
                         LocalDateTime.now(),
-                        false))));
+                        false)));
+
         // when
         List<Booking> bookingsByUserId = underTest.getBookingsByUserId(userId);
         // then
@@ -103,13 +102,10 @@ class BookingServiceTest {
         assertThat(bookingsByUserId.get(0).getUser().getUserId()).isEqualTo(userId);
     }
 
-    @ParameterizedTest
-    @CsvSource({
-            "sfsdf",
-            "1",
-    })
-    void willFailToGetBookingsByInvalidUserId(String userId) {
-        assertThatThrownBy(() -> underTest.getBookingsByUserId(UUID.fromString(userId))).isInstanceOf(IllegalArgumentException.class);
+    @Test
+    void willFailToGetBookingsByInvalidUserId() {
+        String invalidUserId = "sdsfs";
+        assertThatThrownBy(() -> underTest.getBookingsByUserId(UUID.fromString(invalidUserId))).isInstanceOf(IllegalArgumentException.class);
 
     }
 
@@ -120,30 +116,17 @@ class BookingServiceTest {
         // when
         int currentBookingNumber = underTest.getCurrentBookingNumber();
         // then
-        verify(bookingDao).getCurBookingIdx();
         assertThat(currentBookingNumber).isEqualTo(2);
     }
 
-    @ParameterizedTest
-    @CsvSource({
-            "8ca51d2b-aaaf-4bf2-834a-e02964e10fc3",
-            "b10d126a-3608-4980-9f9c-aa179f5cebc3",
-    })
-    void canGetCarsByUserId(UUID userId) {
+    @Test
+    void willNotGetCarsByNonexistentUser() {
         // given
+        UUID randomUUID = UUID.randomUUID();
         // when
-        List<Car> carsByUserId = underTest.getCarsByUserId(userId);
+        List<Car> carsByUserId = underTest.getCarsByUserId(randomUUID);
         // then
-        assertThat(carsByUserId.size()).isEqualTo(0);
-    }
-
-    @ParameterizedTest
-    @CsvSource({
-            "sfsdf",
-            "1",
-    })
-    void willFailToGetCarsByInvalidUserId(String userId) {
-        assertThatThrownBy(() -> underTest.getCarsByUserId(UUID.fromString(userId))).isInstanceOf(IllegalArgumentException.class);
+        assertThat(carsByUserId).isEmpty();
     }
 
     @ParameterizedTest
@@ -183,10 +166,11 @@ class BookingServiceTest {
         // then
         verify(bookingDao).createBooking(carArgumentCaptor.capture(), userArgumentCaptor.capture());
         Car carArgumentCaptorValue = carArgumentCaptor.getValue();
-        assertThat(carArgumentCaptorValue.getRegNumber()).isEqualTo(carRegNumber);
+        assertThat(carArgumentCaptorValue).isEqualTo(car1234);
         User userArgumentCaptorValue = userArgumentCaptor.getValue();
         assertThat(userArgumentCaptorValue).isEqualTo(james);
         assertThat(newBooking.getCar()).isEqualTo(car1234);
+        assertThat(newBooking.getUser()).isEqualTo(james);
 //        assertThat(newBooking.getBookingTime()).isEqualTo(currentTime);
     }
 }

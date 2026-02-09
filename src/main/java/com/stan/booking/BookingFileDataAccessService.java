@@ -56,7 +56,7 @@ public class BookingFileDataAccessService implements BookingDao {
         return booking;
     }
 
-    private static void writeToFile(File file, String text) {
+    private void writeToFile(File file, String text) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(file, true))) {
             writer.println(text);
         } catch (IOException e) {
