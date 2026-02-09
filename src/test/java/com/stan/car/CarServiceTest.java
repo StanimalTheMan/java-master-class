@@ -47,19 +47,20 @@ class CarServiceTest {
     void canGetAvailableElectricCars() {
         // given
         Car car1234 = new Car("1234", new BigDecimal("89.00"), TESLA,true);
+        Car car5678 = new Car("5678", new BigDecimal("55.00"), TESLA,true);
         User james = new User(UUID.randomUUID(), "James");
         when(bookingDao.getBookings()).thenReturn(List.of(
                 new Booking(UUID.randomUUID(), car1234, james, LocalDateTime.now(), false)
         ));
         List<Car> electricCars = List.of(
-                new Car("1234", new BigDecimal("89.00"), TESLA, true));
+                car1234, car5678);
         when(carDao.getElectricCars()).thenReturn(electricCars);
 
         // when
         List<Car> cars = underTest.getAvailableCars(true);
 
         // then
-        assertThat(cars).hasSize(1).containsAll(electricCars);
+        assertThat(cars).hasSize(1).contains(car5678);
     }
 
     @Test
