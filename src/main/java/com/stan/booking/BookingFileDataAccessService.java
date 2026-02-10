@@ -5,6 +5,7 @@ import com.stan.user.User;
 import com.stan.utilities.Serializer;
 
 import java.io.*;
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,18 +13,36 @@ import java.util.Scanner;
 import java.util.UUID;
 
 public class BookingFileDataAccessService implements BookingDao {
-    private static List<Booking> bookings = new ArrayList<>();
-    private static File file;
+    private final List<Booking> bookings = new ArrayList<>();
+    private final File file;
 
-    static {
-        file = createFile("src/main/java/com/stan/bookings.dat");
+    private Clock clock;
+
+    public BookingFileDataAccessService(File file, Clock clock) {
+        this.file = file;
+        this.clock = clock;
+        ensureFileExists();
+        loadBookings();
+    }
+
+    private void ensureFileExists() {
+        try {
+            if (!file.exists()) {
+                file.getParentFile().mkdirs();
+                file.createNewFile();
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("❌ Could not create bookings file", e);
+        }
+    }
+
+    private void loadBookings() {
         try (Scanner scanner = new Scanner(file)) {
             while (scanner.hasNextLine()) {
                 String serializedBooking = scanner.nextLine();
                 if (serializedBooking.isEmpty()) {
                     continue;
                 }
-                System.out.println(serializedBooking);
                 Booking booking = (Booking)Serializer.fromString(serializedBooking);
                 bookings.add(booking);
             }
@@ -44,7 +63,7 @@ public class BookingFileDataAccessService implements BookingDao {
 
     @Override
     public Booking createBooking(Car car, User user) {
-        Booking booking = new Booking(UUID.randomUUID(), car, user, LocalDateTime.now(), false);
+        Booking booking = new Booking(UUID.randomUUID(), car, user, LocalDateTime.now(clock), false);
         // TODO: this logic breaks because every time i rerun app, available cars are reinitialized.  so this only works if i currently add multiple bookings in same run?
         bookings.add(booking);
         try {
@@ -56,7 +75,7 @@ public class BookingFileDataAccessService implements BookingDao {
         return booking;
     }
 
-    private static void writeToFile(File file, String text) {
+    private void writeToFile(File file, String text) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(file, true))) {
             writer.println(text);
         } catch (IOException e) {

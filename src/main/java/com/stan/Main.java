@@ -11,6 +11,8 @@ import com.stan.user.User;
 import com.stan.user.UserDao;
 import com.stan.user.UserService;
 
+import java.io.File;
+import java.time.Clock;
 import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
@@ -18,7 +20,8 @@ import java.util.UUID;
 public class Main {
     public static void main(String[] args) {
         CarDao carDao = new CarDao();
-        BookingDao bookingDao = new BookingFileDataAccessService();
+        BookingDao bookingDao = new BookingArrayDataAccessService(Clock.systemUTC());
+//        BookingDao bookingDao = new BookingFileDataAccessService(new File("src/main/java/com/stan/bookings.dat"), Clock.systemUTC());
         CarService carService = new CarService(carDao, bookingDao);
 
         UserDao userDao = new UserDao();
@@ -70,7 +73,7 @@ public class Main {
                         userId = scanner.nextLine();
                         List<Car> userCars = bookingService.getCarsByUserId(UUID.fromString(userId));
                         User user = userService.getUserById(UUID.fromString(userId));
-                        if (userCars.size() == 0) {
+                        if (userCars.isEmpty()) {
                             System.out.println("❌ user " + user  + " has no cars booked");
                         } else {
                             for (Car car : userCars) {
@@ -93,7 +96,7 @@ public class Main {
                         break;
                     case "4":
                         cars = carService.getAvailableCars(false);
-                        if (cars.size() == 0) {
+                        if (cars.isEmpty()) {
                             System.out.println("❌ No cars available for renting");
                         } else {
                             // probably can handle better with DTOs
@@ -104,7 +107,7 @@ public class Main {
                         break;
                     case "5":
                         List<Car> electricCars = carService.getAvailableCars(true);
-                        if (electricCars.size() == 0) {
+                        if (electricCars.isEmpty()) {
                             System.out.println("❌ No electric cars available for renting");
                         } else {
                             for (Car car : electricCars) {

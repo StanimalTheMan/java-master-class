@@ -27,15 +27,16 @@ public class CarService {
         } else {
             cars = getCars();
         }
-        List<Car> availableCars = getCars(isElectric, cars, bookings);
-
-        return availableCars;
+        if (cars.isEmpty()) {
+            return cars;
+        }
+        return getCars(isElectric, cars, bookings);
     }
 
-    private static List<Car> getCars(boolean isElectric, List<Car> cars, List<Booking> bookings) {
+    private List<Car> getCars(boolean isElectric, List<Car> cars, List<Booking> bookings) {
         Set<String> bookedCarRegNumbers = bookings.stream().map(booking -> booking.getCar().getRegNumber()).collect(Collectors.toSet());
         if (isElectric) {
-            return cars.stream().filter(car -> !bookedCarRegNumbers.contains(car.getRegNumber())).filter(car -> car.isElectric()).toList();
+            return cars.stream().filter(car -> !bookedCarRegNumbers.contains(car.getRegNumber())).filter(Car::isElectric).toList();
         } else{
             return cars.stream().filter(car -> !bookedCarRegNumbers.contains(car.getRegNumber())).toList();
         }
