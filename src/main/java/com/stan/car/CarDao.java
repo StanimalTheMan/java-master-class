@@ -17,7 +17,7 @@ public class CarDao {
                 Arrays.asList(
                         new Car("1234", new BigDecimal("89.00"), TESLA,true),
                         new Car("5678", new BigDecimal("50.00"), AUDI, false),
-                        new Car("5678", new BigDecimal("77.00"), MERCEDES, false)));
+                        new Car("9999", new BigDecimal("77.00"), MERCEDES, false)));
     }
 
     public List<Car> getCars() {

@@ -15,7 +15,6 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
-    public static final int EXPECTED_INITIAL_USERS_COUNT = 2;
 
     @Mock
     private UserDao userDao;

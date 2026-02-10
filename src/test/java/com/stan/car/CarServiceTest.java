@@ -32,15 +32,16 @@ class CarServiceTest {
     @Test
     void canGetCars() {
         // given
-        when(carDao.getCars()).thenReturn(List.of(  new Car("1234", new BigDecimal("89.00"), TESLA,true),
+        List<Car> cars = List.of(new Car("1234", new BigDecimal("89.00"), TESLA, true),
                 new Car("5678", new BigDecimal("50.00"), AUDI, false),
-                new Car("5678", new BigDecimal("77.00"), MERCEDES, false)));
+                new Car("5678", new BigDecimal("77.00"), MERCEDES, false));
+        when(carDao.getCars()).thenReturn(cars);
 
         // when
-        List<Car> cars = underTest.getCars();
+        List<Car> actual = underTest.getCars();
 
         // then
-        assertThat(cars).hasSize(3);
+        assertThat(actual).hasSize(3).containsAll(cars);
     }
 
     @Test
